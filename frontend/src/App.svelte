@@ -27,7 +27,7 @@
   // โหลดจดหมายจาก backend
   onMount(async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/letter");
+      const response = await fetch("https://birthday-letter-r4ve.onrender.com/api/letter");
       if (response.ok) {
         const data = await response.json();
         recipientName = data.recipientName ?? recipientName;
@@ -59,7 +59,7 @@
     <header class="top-bar">
       <div class="brand">
         <div class="brand-mark">
-          <img src="/Me.jpg" alt="profile" />
+          <img src="./src/assets/Me.jpg" alt="profile" />
         </div>
         <div class="brand-text">
           <span class="brand-name">This letter is sending to P'Dao</span>
@@ -153,7 +153,7 @@
             <img
               src="/sea-clinic.jpg"
               alt="Sunset seaside clinic"
-              on:error={(e) => (e.currentTarget.src = "Memory.jpg")}
+              on:error={(e) => (e.currentTarget.src = "./src/assets/Memory.jpg")}
               loading="lazy"
             />
           </div>
