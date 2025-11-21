@@ -1,0 +1,439 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@1,500&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", system-ui, -apple-system, sans-serif;
+    background: #020617;
+    color: #0f172a;
+}
+
+/* ให้ทุกอย่างอยู่กลางหน้าจอ */
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* พื้นหลังทะเลยามพระอาทิตย์ตก */
+.sea-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.sea-gradient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 10% 0%, #ffe6f2 0, #f97316 25%, #ea580c 45%, #0f172a 90%);
+}
+
+.sea-wave {
+    position: absolute;
+    left: -20%;
+    right: -20%;
+    height: 250px;
+    border-radius: 45%;
+    opacity: 0.5;
+    background: rgba(15, 23, 42, 0.92);
+    animation: bob 14s ease-in-out infinite;
+}
+
+.wave-1 {
+    bottom: -130px;
+}
+
+.wave-2 {
+    bottom: -150px;
+    background: rgba(15, 23, 42, 0.7);
+    animation-delay: -4s;
+}
+
+@keyframes bob {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-14px) rotate(2deg);
+    }
+}
+
+/* กล่องหลัก */
+.layout {
+    max-width: 1100px;
+    width: 100%;
+    padding: 1.8rem 1.6rem 2.1rem;
+    border-radius: 28px;
+    background: radial-gradient(circle at top left,
+            rgba(248, 250, 252, 0.95),
+            rgba(255, 241, 232, 0.92));
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(248, 250, 252, 0.6);
+}
+
+/* HEADER */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.brand-mark {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: 0 12px 25px rgba(248, 113, 113, 0.65);
+}
+
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.brand-name {
+    font-weight: 700;
+    color: #1f2937;
+    font-family: "Playfair Display", serif;
+}
+
+.brand-tagline {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.chip {
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(248, 113, 113, 0.6);
+    background: rgba(255, 247, 237, 0.85);
+    font-size: 0.8rem;
+    color: #9a3412;
+}
+
+/* CONTENT GRID */
+.content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.1fr);
+    gap: 2rem;
+    align-items: center;
+}
+
+/* LEFT */
+.left {
+    color: #1f2937;
+}
+
+.intro {
+    margin: 0 0 0.9rem;
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.highlight {
+    font-weight: 600;
+    color: #ea580c;
+}
+
+/* ENVELOPE (BIGGER VERSION) */
+.envelope-wrapper {
+    margin-top: 0.5rem;
+    margin-bottom: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    perspective: 1800px;
+    cursor: pointer;
+}
+
+.envelope {
+    position: relative;
+    width: min(430px, 100%);
+    height: 300px;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.envelope-back,
+.envelope-front,
+.envelope-flap {
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+}
+
+.envelope-back {
+    background: linear-gradient(145deg, #fed7aa, #fecaca);
+    box-shadow: 0 22px 40px rgba(148, 27, 27, 0.45);
+}
+
+.envelope-front {
+    background: linear-gradient(145deg, #fff7ed, #fee2e2);
+    border-radius: 26px;
+    clip-path: polygon(0 38%, 50% 62%, 100% 38%, 100% 100%, 0 100%);
+    border: 1px solid rgba(248, 113, 113, 0.6);
+}
+
+/* flap (ใหญ่ขึ้น) */
+.envelope-flap {
+    background: linear-gradient(145deg, #fb7185, #f97316);
+    clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 95%, 0 60%);
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+    border-radius: 28px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+/* letter bigger */
+.letter {
+    position: absolute;
+    inset: 22px;
+    top: 38px;
+    border-radius: 22px;
+    background: #fff7ed;
+    box-shadow: 0 14px 36px rgba(148, 27, 27, 0.25);
+    padding: 1.2rem 1.35rem;
+    transform-origin: bottom center;
+    transform: translateY(26px);
+    transition:
+        transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+        opacity 0.45s ease;
+    opacity: 0;
+}
+
+/* content inside letter */
+.letter-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    overflow-y: auto;      /* เลื่อนขึ้นลง */
+    overflow-x: hidden;
+    padding-right: 6px;    /* กัน scrollbar ทับข้อความ */
+    scrollbar-width: thin; /* Firefox */
+}
+
+/* สวยขึ้นบน Chrome */
+.letter-inner::-webkit-scrollbar {
+    width: 6px;
+}
+.letter-inner::-webkit-scrollbar-thumb {
+    background: rgba(148, 27, 27, 0.35);
+    border-radius: 10px;
+}
+.letter-inner {
+    max-height: 100%;
+}
+
+/* paragraph letter */
+.letter-message {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #4b5563;
+    white-space: pre-line;
+}
+
+.muted {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    margin-top: 0.3rem;
+}
+
+.signature {
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+.signature span {
+    font-weight: 600;
+    color: #7f1d1d;
+}
+
+/* open animation */
+.envelope-wrapper.opened .envelope-flap {
+    transform: rotateX(-150deg);
+}
+
+.envelope-wrapper.opened .letter {
+    transform: translateY(-10px);
+    opacity: 1;
+}
+
+.envelope-wrapper:hover .envelope {
+    transform: translateY(-6px);
+}
+
+/* hint */
+.envelope-hint {
+    margin-top: 1rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255, 247, 237, 0.96);
+    color: #9a3412;
+    font-size: 0.82rem;
+    font-weight: 500;
+    box-shadow: 0 10px 18px rgba(148, 27, 27, 0.25);
+    cursor: pointer;
+}
+
+/* INPUTS */
+.inputs {
+    margin-top: 1.6rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem 1rem;
+}
+
+.inputs label {
+    font-size: 0.82rem;
+    color: #4b5563;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.inputs input {
+    border-radius: 999px;
+    border: 1px solid rgba(248, 113, 113, 0.7);
+    padding: 0.45rem 0.9rem;
+    background: rgba(255, 247, 237, 0.92);
+    color: #7f1d1d;
+    outline: none;
+    font-size: 0.85rem;
+}
+
+.inputs input::placeholder {
+    color: #f97316;
+    opacity: 0.7;
+}
+
+.inputs input:focus {
+    border-color: #fb7185;
+    box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.4);
+}
+
+/* RIGHT: PHOTO CARD */
+.right {
+    display: flex;
+    justify-content: center;
+}
+
+.photo-card {
+    max-width: 420px;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.93);
+    border-radius: 26px;
+    padding: 1rem 1rem 1.2rem;
+    border: 1px solid rgba(248, 250, 252, 0.3);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.85);
+    color: #e5e7eb;
+}
+
+.photo-frame {
+    border-radius: 20px;
+    overflow: hidden;
+    height: 230px;
+    margin-bottom: 0.85rem;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 1.2s ease;
+}
+
+.photo-card:hover .photo-frame img {
+    transform: scale(1.12);
+}
+
+.photo-text h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+}
+
+.photo-text p {
+    margin: 0 0 0.6rem;
+    font-size: 0.88rem;
+    color: #d1d5db;
+    line-height: 1.5;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.badges span {
+    font-size: 0.75rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(248, 250, 252, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .right {
+        order: -1;
+    }
+    .layout {
+        padding-inline: 1.1rem;
+    }
+    .inputs {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .page {
+        padding: 1rem;
+    }
+    .layout {
+        padding: 1.3rem 1.1rem 1.6rem;
+    }
+    .envelope {
+        height: 260px;
+    }
+    .letter {
+        inset: 18px;
+        top: 32px;
+    }
+}
