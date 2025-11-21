@@ -2,7 +2,11 @@
   import { onMount } from "svelte";
   import { cubicOut } from "svelte/easing";
 
-  // ข้อมูลเริ่มต้น (ใช้ตอนก่อนโหลดจาก backend เสร็จ)
+  // 👇 ใช้ import รูปแทน path เดิม เพื่อให้ทำงานบน GitHub Pages
+  import meProfile from "./assets/Me.jpg";
+  import memoryPic from "./assets/Memory.jpg";
+
+  // ข้อมูลเริ่มต้น
   let recipientName = "พี่ดาว";
   let senderName = "ขุมทรัพย์";
   let letterMessage =
@@ -11,7 +15,7 @@
   let isLoadingLetter = true;
   let isEnvelopeOpened = false;
 
-  // transition รวม fade + fly
+  // fade+fly transition
   function fadeFly(node, { delay = 0, y = 14, duration = 400 } = {}) {
     return {
       delay,
@@ -24,19 +28,21 @@
     };
   }
 
-  // โหลดจดหมายจาก backend
+  // โหลดจาก backend (ถ้าทำงาน)
   onMount(async () => {
     try {
-      const response = await fetch("https://birthday-letter-r4ve.onrender.com/api/letter");
+      const response = await fetch(
+        "https://birthday-letter-r4ve.onrender.com/api/letter",
+      );
+
       if (response.ok) {
         const data = await response.json();
         recipientName = data.recipientName ?? recipientName;
         senderName = data.senderName ?? senderName;
         letterMessage = data.letterMessage ?? letterMessage;
       }
-    } catch (error) {
-      console.error("โหลดจดหมายไม่สำเร็จ:", error);
-      // ถ้า error ก็ใช้ข้อความ default ด้านบนต่อไป
+    } catch (err) {
+      console.log("ใช้ข้อความ default (backend error)");
     } finally {
       isLoadingLetter = false;
     }
@@ -48,7 +54,6 @@
 </script>
 
 <main class="page">
-  <!-- พื้นหลังทะเลยามพระอาทิตย์ตก -->
   <div class="sea-bg">
     <div class="sea-gradient"></div>
     <div class="sea-wave wave-1"></div>
@@ -59,7 +64,8 @@
     <header class="top-bar">
       <div class="brand">
         <div class="brand-mark">
-          <img src="./src/assets/Me.jpg" alt="profile" />
+          <!-- 👇 ใช้รูปที่ import มา -->
+          <img src={meProfile} alt="profile" />
         </div>
         <div class="brand-text">
           <span class="brand-name">This letter is sending to P'Dao</span>
@@ -71,26 +77,20 @@
     </header>
 
     <section class="content">
-      <!-- ฝั่งซองจดหมาย -->
       <div class="left">
         <p class="intro">
           มีคำอวยพรเล็กๆน้อยๆมาให้ครับ<br />
-          <span class="highlight">{recipientName} !! </span>
+          <span class="highlight">{recipientName} !!</span>
         </p>
 
+        <!-- ซองจดหมาย -->
         <div
           class="envelope-wrapper {isEnvelopeOpened ? 'opened' : ''}"
           role="button"
           tabindex="0"
-          aria-pressed={isEnvelopeOpened}
           on:click={toggleEnvelope}
           on:keydown={(e) => {
-            if (
-              e.key === "Enter" ||
-              e.key === " " ||
-              e.key === "Spacebar" ||
-              e.key === "Space"
-            ) {
+            if (["Enter", " ", "Spacebar"].includes(e.key)) {
               e.preventDefault();
               toggleEnvelope();
             }
@@ -101,13 +101,12 @@
             <div class="envelope-flap"></div>
             <div class="envelope-front"></div>
 
-            <!-- การ์ดด้านใน -->
             <div class="letter">
               <div class="letter-inner">
                 <h2>ถึง {recipientName}</h2>
 
                 {#if isLoadingLetter}
-                  <p class="muted">กำลังให้คลื่นลมช่วยพัดข้อความมาหาอยู่...</p>
+                  <p class="muted">กำลังโหลดข้อความจากสายลมทะเล...</p>
                 {:else}
                   <p
                     class="letter-message"
@@ -127,13 +126,14 @@
 
           <button class="envelope-hint">
             {#if isEnvelopeOpened}
-              เป็นคำอวยพรจากผมเองครับ!!
+              ปิดคำอวยพรได้ครับ
             {:else}
               ลองเปิดดูได้เลยครับ!!
             {/if}
           </button>
         </div>
 
+        <!-- input -->
         <div class="inputs">
           <label>
             ถึง:
@@ -146,20 +146,17 @@
         </div>
       </div>
 
-      <!-- ฝั่งรูปคลินิกริมทะเลยามเย็น -->
       <div class="right">
         <div class="photo-card">
           <div class="photo-frame">
-            <img
-              src="/sea-clinic.jpg"
-              alt="Sunset seaside clinic"
-              on:error={(e) => (e.currentTarget.src = "./src/assets/Memory.jpg")}
-              loading="lazy"
-            />
+            <!-- 👇 ใช้รูป Memory.jpg ที่ import มา -->
+            <img src={memoryPic} alt="Sunset seaside clinic" loading="lazy" />
           </div>
+
           <div class="photo-text">
             <h3>"ผมไม่มีวันลืมรูปภาพและความทรงจำนี้แน่นอนครับ"</h3>
             <p>⭐ ขอบคุณพี่ดาวที่คอยช่วยเหลือขุมทรัพย์มาตลอดนะครับ ⭐</p>
+
             <div class="badges">
               <span>#สุขสันต์วันเกิด</span>
               <span>#HBD</span>
@@ -173,7 +170,6 @@
 </main>
 
 <style>
-  /* เสริมสไตล์เฉพาะข้อความจดหมาย (ใช้ร่วมกับ style.css เดิม) */
   .letter-message {
     font-size: 0.92rem;
     line-height: 1.6;
